@@ -4,9 +4,7 @@ certifi==2017.7.27.1
 chardet==3.0.4
 future==0.16.0
 multidict==3.2.0
-pkg-resources==0.0.0
 python-telegram-bot==8.0
-telegram==0.0.1
 telepot==12.3
 urllib3==1.22
 yarl==0.12.0

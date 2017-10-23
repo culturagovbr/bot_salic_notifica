@@ -9,7 +9,39 @@ O bot_salic_projetoaprovado_notifica tem o objetivo de criar canal de notificaç
 * python3-virtualenv
 * SQlite
 
-As dependencias de pacotes estão no requirements.tx
+As dependencias de pacotes estão no requirements.txt
+
+## Usando Docker
+
+Você precisa ter instalado o Docker para executar os procedimentos abaixo.
+
+1. Entre na pasta do projeto e crie a imagem do projeto:
+
+```
+docker build -t salic_bot:latest .
+```
+
+2. Crie um novo container com a imagem recém criada:
+
+```
+docker run --name salic_bot -e SALIC_BOT_TOKEN=<seu token aqui> salic_bot:latest
+```
+
+## Docker no desenvolvimento
+
+No caso de desenvolvimento, é recomendado o uso do [docker-compose](https://docs.docker.com/compose/install/) para testar as implementações do bot.
+
+Para definir o token, crie um arquivo `.env` e defina o o valor gerado pelo @BotFather:
+
+```
+SALIC_BOT_TOKEN=<seu token aqui>
+```
+
+Feito isso é só rodar via `run`. O Compose irá gerar a imagem e levanta-lo:
+
+```
+docker-compose build salic_bot
+```
 
 ## Passos da Instalação para Debian/Ubuntu
 

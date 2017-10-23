@@ -1,0 +1,9 @@
+version: '2'
+services:
+  salic_bot:
+    container_name: salic_bot
+    build: .
+    volumes:
+      - .:/srv
+    environment:
+      - SALIC_BOT_TOKEN=${SALIC_BOT_TOKEN}
