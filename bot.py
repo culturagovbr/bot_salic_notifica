@@ -3,19 +3,25 @@ import sys
 import sqlite3
 import time
 import telepot
+import logging
+import urllib.request, json
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-import urllib.request, json
 from urllib.request import urlopen
 from telegram.ext import Updater, CommandHandler, Job
-import logging
+from telegram import ParseMode
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
+# Logica para conferir se não existe em todas as 15 posições
 checkExist = '[(0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,)]'
+
+
+
 # Função que contém o algoritmo para pegar o buffer de PRONACs e fazer conferência se ja existem
 def alarm(bot, job):
     # fazendo conexão com banco de dados
@@ -31,11 +37,43 @@ def alarm(bot, job):
         array.append(noticia['_embedded']['projetos'][i]['PRONAC'])
     
 
-    y = (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
+    posicoes = range(15)
+
     # Laço feito para conferência se há novidades e então mandar a mensagem do bot
-    for x in reversed(y):
+    for x in reversed(posicoes):
         
-        menssagem =  'Nova Proposta de #Projeto aceita pelo MinC:' + '\n\n' + 'Nome do Projeto: ' + noticia['_embedded']['projetos'][x]['nome'] +'\n\n'+ 'Pronac do Projeto: ' + noticia['_embedded']['projetos'][x]['PRONAC'] +'\n\n'+ 'Area do Projeto: ' + noticia['_embedded']['projetos'][x]['area'] +'\n\n'+ 'Segmento: ' + noticia['_embedded']['projetos'][x]['segmento'] + '\n\n'+ 'Cidade: '+ noticia['_embedded']['projetos'][x]['municipio']+'-'+ noticia['_embedded']['projetos'][x]['UF'] +'\n\n'+ 'Valor da Proposta: R$ '+ str(noticia['_embedded']['projetos'][x]['valor_proposta'])+'\n\n'+ 'Resumo do Projeto: ' + noticia['_embedded']['projetos'][x]['resumo'] +'\n\n'+ 'Acompanhe a execução deste projeto no Versalic em:\n' + 'http://versalic.cultura.gov.br/#/projetos/'+ noticia['_embedded']['projetos'][x]['PRONAC'] +'\n\n'+ 'Mais sobre a Lei Rouanet em Rouanet.cultura.gov.br'
+        menssagem =  """
+        Nova Proposta de #Projeto aceita pelo MinC:
+
+        *Nome do Projeto*: {nome}
+
+        *Pronac do Projeto*: {pronac}
+
+        *Area do Projeto*: {area}  
+
+        *Segmento*: {segmento} 
+
+        *Cidade*: {cidade} - {estado}  
+
+        *Valor da Proposta*: ` R$ {valor_proposta}` 
+
+        *Resumo do Projeto*: {resumo}  
+
+        Acompanhe a execução deste projeto no Versalic em:
+        http://versalic.cultura.gov.br/#/projetos/{pronac}
+
+        Mais sobre a Lei Rouanet em Rouanet.cultura.gov.br
+
+        """.format(
+            nome=noticia['_embedded']['projetos'][x]['nome'],
+            pronac=noticia['_embedded']['projetos'][x]['PRONAC'],
+            area=noticia['_embedded']['projetos'][x]['area'],
+            segmento=noticia['_embedded']['projetos'][x]['segmento'],
+            cidade=noticia['_embedded']['projetos'][x]['municipio'],
+            estado=noticia['_embedded']['projetos'][x]['UF'],
+            valor_proposta=noticia['_embedded']['projetos'][x]['valor_proposta'],
+            resumo=noticia['_embedded']['projetos'][x]['resumo']
+            )
         params =  (noticia['_embedded']['projetos'][x]['PRONAC'],)
         
         sql = 'SELECT PRONAC = ? FROM salicBot WHERE cod = 1'
@@ -46,9 +84,9 @@ def alarm(bot, job):
         # Verificando se existe no Banco
         if checkExist == str(teste2):
             
-            bot.sendMessage(job.context, text=menssagem)
+            bot.sendMessage(job.context, text=menssagem, parse_mode=ParseMode.MARKDOWN)
     # Laço feito para guardar no banco a ultima atualização da API para criação de um buffer
-    for p in range(15):
+    for p in posicoes:
 
         params1 =  (noticia['_embedded']['projetos'][p]['PRONAC'],(p+1))
         sql1 = 'UPDATE salicBot SET PRONAC = ? WHERE id = ?'
@@ -84,7 +122,7 @@ def set(bot, update, job_queue, chat_data):
 
 def main():
 
-    updater = Updater(os.environ.get('token'))
+    updater = Updater(os.environ.get('SALIC_BOT_TOKEN'))
 
 
 
