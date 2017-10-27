@@ -7,6 +7,7 @@ O bot_salic_projetoaprovado_notifica tem o objetivo de criar canal de notificaç
 * Python3
 * PIP
 * python3-virtualenv
+* Docker
 * SQlite
 
 As dependencias de pacotes estão no requirements.txt
@@ -43,7 +44,7 @@ Feito isso é só rodar via `run`. O Compose irá gerar a imagem e levanta-lo:
 docker-compose build salic_bot
 ```
 
-## Passos da Instalação para Debian/Ubuntu
+## Usando ambiente virtual Debian/Ubuntu
 
 1. Instale o PIP, instalador dos pacotes python3
 
@@ -93,7 +94,13 @@ O arquivo pode ser baixado de forma direta e rápida utilizando o comando wget -
 
     ```
 
-6. Ative o ambiente virtual instale as dependências python do projeto
+6. Na linha 125, configure o arquivo bot.py com a chave fornecida pelo @BotFather (Token)
+    
+    ```
+    updater = Updater(os.environ.get('SALIC_BOT_TOKEN'))
+    ```
+
+7. Ative o ambiente virtual instale as dependências python do projeto
     ```
     source /caminho/para/o/ambiente/virtual/bin/activate
 
@@ -105,14 +112,7 @@ O arquivo pode ser baixado de forma direta e rápida utilizando o comando wget -
     
     ```
     
-7. Configure o banco de dados
-
-```
-Essa instrução esta sendo desenvolvida...
-
-```
-
-11. Execute a aplicação (É preciso ter o ambiente virtual ativado)
+8. Execute a aplicação (É preciso ter o ambiente virtual ativado)
     ```
     python3 bot.py runservice
 
