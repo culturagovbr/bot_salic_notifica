@@ -101,7 +101,7 @@ def alarm(bot, job):
 # Função onde é feita a conta do tempo de quando a função que manda mensagem será chamada
 def set(bot, update, job_queue, chat_data):
 
-    chat_id = update.message.chat_id
+    chat_id = '@projetosMinc'
 
     try:
         
