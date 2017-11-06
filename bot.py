@@ -102,6 +102,9 @@ def alarm(bot, job):
 def set(bot, update, job_queue, chat_data):
 
     chat_id = '@projetosMinc'
+    #Para usar o bot enviando a mensagem diretamente no bate-papo
+    #diretamente para quem mandou a mensagem, utilize o código abaixo.
+    #chat_id = update.message.chat_id
 
     try:
         
