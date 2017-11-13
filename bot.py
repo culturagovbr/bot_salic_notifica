@@ -6,6 +6,7 @@ import time
 import telepot
 import logging
 import urllib.request, json
+from money import Money
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from urllib.request import urlopen
@@ -21,7 +22,9 @@ logger = logging.getLogger(__name__)
 # Logica para conferir se não existe em todas as 15 posições
 checkExist = '[(0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,)]'
 
-
+def _format_money(price):
+    project_money = Money(amount=price, currency='BRL')
+    return project_money.format('pt_BR', 'R$ #,##0.00')
 
 # Função que contém o algoritmo para pegar o buffer de PRONACs e fazer conferência se ja existem
 def alarm(bot, job):
@@ -56,7 +59,7 @@ def alarm(bot, job):
 
         *Segmento*: {segmento} 
 
-        *Valor*: ` R$ {valor_proposta}` 
+        *Valor*: `{valor_proposta}` 
 
         
 
@@ -71,7 +74,7 @@ def alarm(bot, job):
             segmento=noticia['_embedded']['projetos'][x]['segmento'],
             cidade=noticia['_embedded']['projetos'][x]['municipio'],
             estado=noticia['_embedded']['projetos'][x]['UF'],
-            valor_proposta=noticia['_embedded']['projetos'][x]['valor_proposta'],
+            valor_proposta=_format_money(noticia['_embedded']['projetos'][x]['valor_proposta']),
             pronac=noticia['_embedded']['projetos'][i]['PRONAC'],
             resumo=noticia['_embedded']['projetos'][x]['resumo']
             )
