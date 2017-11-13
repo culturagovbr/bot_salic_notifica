@@ -101,7 +101,7 @@ def alarm(bot, job):
 # Função onde é feita a conta do tempo de quando a função que manda mensagem será chamada
 def set(bot, update, job_queue, chat_data):
 
-    chat_id = '@projetosMinc'
+    chat_id = '@infoNovasRouanet'
     #Para usar o bot enviando a mensagem diretamente no bate-papo
     #diretamente para quem mandou a mensagem, utilize o código abaixo.
     #chat_id = update.message.chat_id
@@ -122,6 +122,16 @@ def set(bot, update, job_queue, chat_data):
     except (IndexError, ValueError):
         update.message.reply_text('Use: /start')
 
+def easter(bot, update):
+    chat_id = update.message.chat_id
+    wut = """
+    ────▒▒▒▒▒────▒▒▒▒▒───▄████▄────────
+    ─▒─▄▒─▄▒──▒─▄▒─▄▒─███▄█▀─────────
+    ─▒▒▒▒▒▒▒─▒▒▒▒▒▒▒▐████──█──█──█─
+    ─▒▒▒▒▒▒▒─▒▒▒▒▒▒▒─█████▄────────
+    ─▒─▒─▒─▒──▒─▒─▒─▒──▀████▀────────
+    """
+    bot.sendMessage(chat_id=chat_id, text=wut, parse_mode=ParseMode.MARKDOWN)
 
 def main():
 
@@ -136,6 +146,7 @@ def main():
     dp.add_handler(CommandHandler("start", set,
                                   pass_job_queue=True,
                                   pass_chat_data=True))
+    dp.add_handler(CommandHandler("easter", easter))
 
 
     updater.start_polling(timeout=240,clean=False)
