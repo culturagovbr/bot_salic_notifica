@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 import sqlite3
@@ -45,19 +46,19 @@ def alarm(bot, job):
         menssagem =  """
         Nova Proposta de #Projeto aceita pelo MinC:
 
-        *Nome do Projeto*: {nome}
+        *Nome*: {nome}
 
-        *Pronac do Projeto*: {pronac}
-
-        *Area do Projeto*: {area}  
-
-        *Segmento*: {segmento} 
+        *Resumo*: {resumo}
 
         *Cidade*: {cidade} - {estado}  
 
-        *Valor da Proposta*: ` R$ {valor_proposta}` 
+        *Area*: {area}  
 
-        *Resumo do Projeto*: {resumo}  
+        *Segmento*: {segmento} 
+
+        *Valor*: ` R$ {valor_proposta}` 
+
+        
 
         Acompanhe a execução deste projeto no Versalic em:
         http://versalic.cultura.gov.br/#/projetos/{pronac}
@@ -66,12 +67,12 @@ def alarm(bot, job):
 
         """.format(
             nome=noticia['_embedded']['projetos'][x]['nome'],
-            pronac=noticia['_embedded']['projetos'][x]['PRONAC'],
             area=noticia['_embedded']['projetos'][x]['area'],
             segmento=noticia['_embedded']['projetos'][x]['segmento'],
             cidade=noticia['_embedded']['projetos'][x]['municipio'],
             estado=noticia['_embedded']['projetos'][x]['UF'],
             valor_proposta=noticia['_embedded']['projetos'][x]['valor_proposta'],
+            pronac=noticia['_embedded']['projetos'][i]['PRONAC'],
             resumo=noticia['_embedded']['projetos'][x]['resumo']
             )
         params =  (noticia['_embedded']['projetos'][x]['PRONAC'],)
@@ -104,7 +105,7 @@ def set(bot, update, job_queue, chat_data):
     chat_id = '@infoNovasRouanet'
     #Para usar o bot enviando a mensagem diretamente no bate-papo
     #diretamente para quem mandou a mensagem, utilize o código abaixo.
-    #chat_id = update.message.chat_id
+    # chat_id = update.message.chat_id
 
     try:
         
