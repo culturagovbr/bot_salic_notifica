@@ -75,7 +75,7 @@ def alarm(bot, job):
             cidade=noticia['_embedded']['projetos'][x]['municipio'],
             estado=noticia['_embedded']['projetos'][x]['UF'],
             valor_proposta=_format_money(noticia['_embedded']['projetos'][x]['valor_proposta']),
-            pronac=noticia['_embedded']['projetos'][i]['PRONAC'],
+            pronac=noticia['_embedded']['projetos'][x]['PRONAC'],
             resumo=noticia['_embedded']['projetos'][x]['resumo']
             )
         params =  (noticia['_embedded']['projetos'][x]['PRONAC'],)
