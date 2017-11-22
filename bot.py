@@ -8,7 +8,7 @@ import logging
 import urllib.request, json
 from money import Money
 from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from urllib.request import urlopen
 from telegram.ext import Updater, CommandHandler, Job
 from telegram import ParseMode
