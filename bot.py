@@ -46,6 +46,10 @@ def alarm(bot, job):
     # Laço feito para conferência se há novidades e então mandar a mensagem do bot
     for x in reversed(posicoes):
         
+        linkBotao = str('http://versalic.cultura.gov.br/#/projetos/' + noticia['_embedded']['projetos'][x]['PRONAC'])
+        keyboard = [[InlineKeyboardButton("Ver mais detalhes...", callback_data='1',url=linkBotao)]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
         menssagem =  """
         Nova Proposta de #Projeto aceita pelo MinC:
 
@@ -61,12 +65,10 @@ def alarm(bot, job):
 
         *Valor*: `{valor_proposta}` 
 
-        
-
-        Acompanhe a execução deste projeto no Versalic em:
-        http://versalic.cultura.gov.br/#/projetos/{pronac}
 
         Mais sobre a Lei Rouanet em Rouanet.cultura.gov.br
+
+
 
         """.format(
             nome=noticia['_embedded']['projetos'][x]['nome'],
@@ -88,7 +90,7 @@ def alarm(bot, job):
         # Verificando se existe no Banco
         if checkExist == str(teste2):
             
-            bot.sendMessage(job.context, text=menssagem, parse_mode=ParseMode.MARKDOWN)
+            bot.sendMessage(job.context, text=menssagem, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
     # Laço feito para guardar no banco a ultima atualização da API para criação de um buffer
     for p in posicoes:
 
@@ -106,6 +108,7 @@ def alarm(bot, job):
 def set(bot, update, job_queue, chat_data):
 
     chat_id = '@infoNovasRouanet'
+    # chat_id = '@projetosMinc'
     #Para usar o bot enviando a mensagem diretamente no bate-papo
     #diretamente para quem mandou a mensagem, utilize o código abaixo.
     # chat_id = update.message.chat_id
@@ -121,7 +124,7 @@ def set(bot, update, job_queue, chat_data):
         job = job_queue.run_repeating(alarm, due, context=chat_id)
         chat_data['job'] = job
 
-        update.message.reply_text('Agora você receberá os Projetos aprovados do Salic no Canal @projetosMinc')
+        update.message.reply_text('Agora você receberá os Projetos aprovados do Salic no Canal @infoNovasRouanet')
 
     except (IndexError, ValueError):
         update.message.reply_text('Use: /start')
